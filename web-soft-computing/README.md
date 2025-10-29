@@ -5,7 +5,7 @@ Website interaktif untuk mempelajari tiga metode utama dalam Soft Computing:
 - **Jaringan Saraf Tiruan (ANN)** - Model komputasi yang meniru neuron biologis
 - **Algoritma Genetika (GA)** - Optimasi berdasarkan proses evolusi alamiah
 
-## � Quick Start
+## ⚡ Quick Start
 
 **Ringkas:**
 1. Install dependencies: `pip install -r backend/requirements.txt`
@@ -101,7 +101,7 @@ class GeneticAlgorithm:
         # Return hasil evolusi
 ```
 
-## � Teknologi
+## 🖥️ Teknologi
 
 **Frontend:**
 - HTML5, CSS3 (Custom Properties, Flexbox, Grid)
@@ -140,3 +140,4 @@ Proyek pembelajaran untuk demonstrasi Soft Computing.
 ---
 
 **Dibuat dengan ❤️ untuk pembelajaran Soft Computing**
+
