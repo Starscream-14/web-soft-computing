@@ -4,7 +4,6 @@ Website interaktif untuk mempelajari tiga metode utama dalam Soft Computing:
 - **Logika Fuzzy (Fuzzy Logic)** - Menangani ketidakpastian dengan derajat keanggotaan
 - **Jaringan Saraf Tiruan (ANN)** - Model komputasi yang meniru neuron biologis
 - **Algoritma Genetika (GA)** - Optimasi berdasarkan proses evolusi alamiah
-- **Algoritma Genetika (GA) 2** - Penyelesaian masalah Knapsack sederhana
 
 ## Quick Start
 
@@ -20,15 +19,16 @@ web-soft-computing/
 ├── backend/               # Python Flask Backend
 │   ├── server.py          # API endpoints (Fuzzy, ANN, GA)
 │   ├── run_server.py      # Server runner
-│   ├── start_server.bat   # Quick launcher 
+│   ├── start_server.bat   # Quick launcher
 │   └── requirements.txt   # Dependencies
 ├── bungkus/               # Frontend (HTML, CSS, JS)
 │   ├── index.html         # Halaman utama
 │   ├── style.css          # Tema abu-abu/hitam
 │   └── Main.js            # Interaktivitas & API calls
-├── CARA_JALANKAN.md       # Panduan lengkap
+├── CARA_JALANKAN.md       # 📖 Panduan lengkap
 └── README.md              # Dokumentasi ini
 ```
+
 
 ## Penjelasan Setiap Metode
 
@@ -44,15 +44,6 @@ web-soft-computing/
   - Defuzzifikasi: Hitung skor kenyamanan 0–100
 - Output: Skor kenyamanan + label (Sangat Nyaman / Cukup Nyaman / Kurang Nyaman)
 
-**Backend (`server.py`):**
-```python
-@app.route('/api/fuzzy', methods=['POST'])
-def fuzzy_demo():
-    # Terima input suhu & kelembaban
-    # Hitung membership functions
-    # Jalankan fuzzy inference
-    # Return skor kenyamanan
-```
 
 ### 2. Jaringan Saraf Tiruan (ANN)
 
@@ -66,14 +57,6 @@ def fuzzy_demo():
   - Bobot sudah pre-trained (untuk demo)
 - Output: Nilai prediksi (0–1)
 
-**Backend (`server.py`):**
-```python
-class SimpleANN:
-    def forward(self, inputs):
-        # Hidden layer: aktivasi sigmoid
-        # Output layer: aktivasi sigmoid
-        # Return prediksi
-```
 
 ### 3. Algoritma Genetika (Genetic Algorithm)
 
@@ -90,15 +73,14 @@ class SimpleANN:
   6. Ulangi sampai target ditemukan atau mencapai generasi maksimal
 - Output: String hasil evolusi + jumlah generasi yang dibutuhkan
 
-**Backend (`server.py`):**
-```python
-class GeneticAlgorithm:
-    def run(self, max_generations):
-        # Loop setiap generasi
-        # Evaluasi fitness
-        # Seleksi, crossover, mutasi
-        # Return hasil evolusi
-```
+
+### 4. Algoritma Genetika 2 (Knapsack)
+
+**Konsep singkat:** GA untuk Knapsack — kromosom biner (0/1), pilih item agar total value maksimal tanpa melebihi kapasitas.
+
+**Demo singkat:** kirim parameter GA (mis. `pop_size`, `generations`, `crossover_rate`, `mutation_rate`, `capacity`, `elitism`) ke `POST /api/genetic2`. Contoh item default: A(7w,5v), B(2w,4v), C(1w,7v), D(9w,2v).
+
+Endpoint mengembalikan kromosom terbaik, item terpilih, total berat & nilai, serta ringkasan generasi.
 
 ## Tools
 
@@ -111,10 +93,3 @@ class GeneticAlgorithm:
 - Flask (Web framework)
 - Flask-CORS (Cross-Origin Resource Sharing)
 - NumPy (Operasi numerik untuk ANN)
-
-
-
-
-
-
-
