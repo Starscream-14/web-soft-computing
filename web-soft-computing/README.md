@@ -4,10 +4,10 @@ Website interaktif untuk mempelajari tiga metode utama dalam Soft Computing:
 - **Logika Fuzzy (Fuzzy Logic)** - Menangani ketidakpastian dengan derajat keanggotaan
 - **Jaringan Saraf Tiruan (ANN)** - Model komputasi yang meniru neuron biologis
 - **Algoritma Genetika (GA)** - Optimasi berdasarkan proses evolusi alamiah
+- **Algoritma Genetika (GA) 2** - Penyelesaian masalah Knapsack sederhana
 
 ## Quick Start
 
-**Ringkas:**
 1. Install dependencies: `pip install -r backend/requirements.txt`
 2. Jalankan backend: Double-click `backend/start_server.bat`
 3. Buka website: Double-click `bungkus/index.html`
@@ -111,6 +111,7 @@ class GeneticAlgorithm:
 - Flask (Web framework)
 - Flask-CORS (Cross-Origin Resource Sharing)
 - NumPy (Operasi numerik untuk ANN)
+
 
 
 
