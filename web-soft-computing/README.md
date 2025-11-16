@@ -29,10 +29,8 @@ web-soft-computing/
 ├── CARA_JALANKAN.md       # Panduan lengkap
 └── README.md              # Dokumentasi ini
 ```
-```
 
 ## Penjelasan Setiap Metode
-```
 
 ### 1. Logika Fuzzy (Fuzzy Logic)
 
@@ -113,6 +111,7 @@ class GeneticAlgorithm:
 - Flask (Web framework)
 - Flask-CORS (Cross-Origin Resource Sharing)
 - NumPy (Operasi numerik untuk ANN)
+
 
 
 
