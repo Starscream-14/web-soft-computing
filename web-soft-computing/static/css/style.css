@@ -285,4 +285,3 @@ code{font-family:'Consolas','Monaco','Courier New',monospace;font-size:0.9rem;co
 .result{margin-top:16px;padding:12px;background:rgba(212,175,55,0.08);border-radius:6px;border-left:3px solid #d4af37;min-height:40px;color:var(--muted);font-size:0.9rem;line-height:1.4}
 .result:empty{display:none}
 .result strong{color:#f4e5b8}
-
