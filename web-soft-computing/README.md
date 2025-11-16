@@ -32,7 +32,7 @@ web-soft-computing/
 
 ## Penjelasan Setiap Metode
 
-### 1. Logika Fuzzy (Fuzzy Logic)
+## 1. Logika Fuzzy (Fuzzy Logic)
 
 **Konsep:** Menangani ketidakpastian dengan derajat keanggotaan (0–1) alih-alih nilai Boolean.
 
@@ -93,4 +93,5 @@ Endpoint mengembalikan kromosom terbaik, item terpilih, total berat & nilai, ser
 - Flask (Web framework)
 - Flask-CORS (Cross-Origin Resource Sharing)
 - NumPy (Operasi numerik untuk ANN)
+
 
