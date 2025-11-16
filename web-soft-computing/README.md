@@ -5,7 +5,7 @@ Website interaktif untuk mempelajari tiga metode utama dalam Soft Computing:
 - **Jaringan Saraf Tiruan (ANN)** - Model komputasi yang meniru neuron biologis
 - **Algoritma Genetika (GA)** - Optimasi berdasarkan proses evolusi alamiah
 
-## ⚡ Quick Start
+## Quick Start
 
 **Ringkas:**
 1. Install dependencies: `pip install -r backend/requirements.txt`
@@ -13,25 +13,25 @@ Website interaktif untuk mempelajari tiga metode utama dalam Soft Computing:
 3. Buka website: Double-click `bungkus/index.html`
 4. Coba demo di section **Materi**!
 
-## 📁 Struktur Proyek
+## Struktur Proyek
 
 ```
 web-soft-computing/
 ├── backend/               # Python Flask Backend
 │   ├── server.py          # API endpoints (Fuzzy, ANN, GA)
 │   ├── run_server.py      # Server runner
-│   ├── start_server.bat   # Quick launcher ⭐
+│   ├── start_server.bat   # Quick launcher 
 │   └── requirements.txt   # Dependencies
 ├── bungkus/               # Frontend (HTML, CSS, JS)
 │   ├── index.html         # Halaman utama
 │   ├── style.css          # Tema abu-abu/hitam
 │   └── Main.js            # Interaktivitas & API calls
-├── CARA_JALANKAN.md       # 📖 Panduan lengkap
+├── CARA_JALANKAN.md       # Panduan lengkap
 └── README.md              # Dokumentasi ini
 ```
 ```
 
-## 📚 Penjelasan Setiap Metode
+## Penjelasan Setiap Metode
 
 ### 1. Logika Fuzzy (Fuzzy Logic)
 
@@ -101,7 +101,7 @@ class GeneticAlgorithm:
         # Return hasil evolusi
 ```
 
-## 🖥️ Teknologi
+## Tools
 
 **Frontend:**
 - HTML5, CSS3 (Custom Properties, Flexbox, Grid)
@@ -113,31 +113,6 @@ class GeneticAlgorithm:
 - Flask-CORS (Cross-Origin Resource Sharing)
 - NumPy (Operasi numerik untuk ANN)
 
-## 🎨 Fitur
 
-- ✅ Tema abu-abu/hitam modern dengan gradien
-- ✅ Responsive design (hamburger menu untuk mobile)
-- ✅ Smooth scrolling antar section
-- ✅ Active link highlighting saat scroll
-- ✅ Interactive demos dengan real-time processing
-- ✅ Error handling & loading states
 
-## 🚀 Pengembangan Lanjutan
-
-Ide untuk ekspansi proyek:
-
-- [ ] Visualisasi grafik (Chart.js / D3.js)
-- [ ] History hasil di localStorage
-- [ ] Training ANN dengan dataset real
-- [ ] Metode tambahan (PSO, ACO, Simulated Annealing)
-- [ ] Deploy backend (Render, Railway, Vercel Serverless)
-- [ ] Unit tests & integration tests
-
-## 📄 Lisensi
-
-Proyek pembelajaran untuk demonstrasi Soft Computing.
-
----
-
-**Dibuat dengan ❤️ untuk pembelajaran Soft Computing**
 
