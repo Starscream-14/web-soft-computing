@@ -25,7 +25,7 @@ web-soft-computing/
 │   ├── index.html         # Halaman utama
 │   ├── style.css          # Tema abu-abu/hitam
 │   └── Main.js            # Interaktivitas & API calls
-├── CARA_JALANKAN.md       # 📖 Panduan lengkap
+├── CARA_JALANKAN.md       # Panduan lengkap
 └── README.md              # Dokumentasi ini
 ```
 
@@ -93,3 +93,4 @@ Endpoint mengembalikan kromosom terbaik, item terpilih, total berat & nilai, ser
 - Flask (Web framework)
 - Flask-CORS (Cross-Origin Resource Sharing)
 - NumPy (Operasi numerik untuk ANN)
+
