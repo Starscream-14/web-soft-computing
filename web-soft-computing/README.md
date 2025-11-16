@@ -32,7 +32,8 @@ web-soft-computing/
 
 ## Penjelasan Setiap Metode
 
-## 1. Logika Fuzzy (Fuzzy Logic)
+
+### 1. Logika Fuzzy (Fuzzy Logic)
 
 **Konsep:** Menangani ketidakpastian dengan derajat keanggotaan (0–1) alih-alih nilai Boolean.
 
@@ -43,6 +44,7 @@ web-soft-computing/
   - Inferensi: Aturan fuzzy (contoh: "Jika suhu normal DAN kelembaban sedang, maka nyaman tinggi")
   - Defuzzifikasi: Hitung skor kenyamanan 0–100
 - Output: Skor kenyamanan + label (Sangat Nyaman / Cukup Nyaman / Kurang Nyaman)
+
 
 
 ### 2. Jaringan Saraf Tiruan (ANN)
@@ -56,6 +58,7 @@ web-soft-computing/
   - Aktivasi sigmoid di setiap neuron
   - Bobot sudah pre-trained (untuk demo)
 - Output: Nilai prediksi (0–1)
+
 
 
 ### 3. Algoritma Genetika (Genetic Algorithm)
@@ -72,6 +75,7 @@ web-soft-computing/
   5. Mutasi acak
   6. Ulangi sampai target ditemukan atau mencapai generasi maksimal
 - Output: String hasil evolusi + jumlah generasi yang dibutuhkan
+
 
 
 ### 4. Algoritma Genetika 2 (Knapsack)
@@ -93,5 +97,6 @@ Endpoint mengembalikan kromosom terbaik, item terpilih, total berat & nilai, ser
 - Flask (Web framework)
 - Flask-CORS (Cross-Origin Resource Sharing)
 - NumPy (Operasi numerik untuk ANN)
+
 
 
