@@ -176,4 +176,48 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  const ga2Form = document.getElementById('ga2Form');
+  if (ga2Form) {
+    ga2Form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      showLoading('ga2Result');
+
+      const formData = new FormData(ga2Form);
+      const data = {
+        pop_size: parseInt(formData.get('pop_size')),
+        generations: parseInt(formData.get('generations')),
+        crossover_rate: parseFloat(formData.get('crossover_rate')),
+        mutation_rate: parseFloat(formData.get('mutation_rate')),
+        capacity: parseInt(formData.get('capacity')),
+        elitism: formData.get('elitism') === 'on' || formData.get('elitism') === 'true'
+      };
+
+      try {
+        const response = await fetch(`${API_BASE}/genetic2`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) throw new Error('Backend tidak merespons');
+
+        const result = await response.json();
+        if (result.error) throw new Error(result.error);
+
+        let html = `<strong>Hasil Knapsack GA:</strong><br/>`;
+        if (result.success) {
+          html += `Nilai terbaik: <strong>${result.total_value}</strong> (berat ${result.total_weight}/${result.capacity})<br/>`;
+          html += `Item terpilih: <strong>${result.chosen_items.join(', ') || '-'}</strong><br/>`;
+        } else {
+          html += `Tidak berhasil menemukan solusi (coba ubah parameter).`;
+        }
+
+        html += `<details><summary>Ringkasan Generasi (terakhir)</summary><pre>${JSON.stringify(result.history, null, 2)}</pre></details>`;
+        showResult('ga2Result', html);
+      } catch (error) {
+        showError('ga2Result', error.message + ' — Pastikan backend berjalan di port 5000');
+      }
+    });
+  }
 });
