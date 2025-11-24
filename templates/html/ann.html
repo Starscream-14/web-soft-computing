@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jaringan Saraf Tiruan (ANN) - Soft Computing</title>
+    <link rel="stylesheet" href="../../static/css/style.css" />
+  </head>
+  <body class="detail-page ann-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="../index.html">MyWebsite</a>
+        <nav class="site-nav">
+          <ul>
+            <li>
+              <a class="nav-link" href="../index.html#home">Home</a>
+            </li>
+            <li>
+              <a class="nav-link" href="../index.html#about">About</a>
+            </li>
+            <li>
+              <a class="nav-link active" href="../index.html#materi">Materi</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <a href="../index.html#materi" class="back-link"
+            ><- Kembali ke Materi</a
+          >
+
+          <h1>Jaringan Saraf Tiruan (ANN)</h1>
+
+          <div class="content-section">
+            <h2>Pengertian</h2>
+            <p>
+              <strong>Artificial Neural Network (ANN)</strong> atau Jaringan
+              Saraf Tiruan adalah model komputasi yang terinspirasi dari cara
+              kerja neuron biologis dalam otak manusia. ANN terdiri dari
+              unit-unit pemrosesan yang saling terhubung (neuron tiruan) yang
+              dapat belajar untuk mengenali pola kompleks dalam data.
+            </p>
+            <p>
+              ANN bekerja dengan cara menerima input, memprosesnya melalui
+              lapisan-lapisan neuron dengan bobot tertentu, dan menghasilkan
+              output. Melalui proses training, ANN dapat menyesuaikan
+              bobot-bobotnya untuk meningkatkan akurasi prediksi.
+            </p>
+
+            <h3>Komponen Utama ANN</h3>
+            <ul>
+              <li>
+                <strong>Input Layer:</strong> Lapisan yang menerima data input
+                awal
+              </li>
+              <li>
+                <strong>Hidden Layer(s):</strong> Lapisan tersembunyi yang
+                memproses informasi dengan bobot dan fungsi aktivasi
+              </li>
+              <li>
+                <strong>Output Layer:</strong> Lapisan yang menghasilkan
+                prediksi akhir
+              </li>
+              <li>
+                <strong>Weights (Bobot):</strong> Parameter yang menentukan
+                kekuatan koneksi antar neuron
+              </li>
+              <li>
+                <strong>Activation Function:</strong> Fungsi yang menentukan
+                output neuron (sigmoid, ReLU, tanh, dll)
+              </li>
+              <li>
+                <strong>Bias:</strong> Nilai offset untuk menyesuaikan threshold
+                aktivasi
+              </li>
+            </ul>
+
+            <h3>Aplikasi ANN</h3>
+            <ul>
+              <li>Pengenalan gambar dan wajah</li>
+              <li>Klasifikasi teks dan sentiment analysis</li>
+              <li>Prediksi harga saham dan time series</li>
+              <li>Sistem rekomendasi</li>
+              <li>Speech recognition dan natural language processing</li>
+              <li>Medical diagnosis</li>
+            </ul>
+          </div>
+
+          <div class="content-section">
+            <h2>Implementasi Python</h2>
+            <p>
+              Berikut adalah implementasi sederhana ANN dengan 2 input, 3 hidden
+              neurons, dan 1 output menggunakan NumPy:
+            </p>
+
+            <div class="code-block-header">
+              backend/server.py - Class ANN Sederhana
+            </div>
+            <pre><code>import numpy as np
+
+class SimpleANN:
+    """Jaringan saraf sederhana: 2 input → 3 hidden → 1 output"""
+    
+    def __init__(self):
+        # Bobot pre-trained untuk demo
+        # Dalam aplikasi nyata, bobot ini hasil dari training
+        self.w_input_hidden = np.array([
+            [0.5, -0.3, 0.8],   # Bobot dari input 1 ke 3 hidden neurons
+            [0.2, 0.6, -0.4]    # Bobot dari input 2 ke 3 hidden neurons
+        ])
+        self.b_hidden = np.array([0.1, -0.2, 0.3])  # Bias hidden layer
+        
+        self.w_hidden_output = np.array([[0.7], [-0.5], [0.9]])  # Bobot ke output
+        self.b_output = np.array([0.2])  # Bias output layer
+    
+    def sigmoid(self, x):
+        """Fungsi aktivasi sigmoid: σ(x) = 1 / (1 + e^(-x))"""
+        # Clip untuk mencegah overflow
+        return 1 / (1 + np.exp(-np.clip(x, -500, 500)))
+    
+    def forward(self, inputs):
+        """Forward propagation: hitung output dari input"""
+        
+        # 1. Hidden layer computation
+        # h = σ(W_input × inputs + bias_hidden)
+        hidden_input = np.dot(inputs, self.w_input_hidden) + self.b_hidden
+        hidden_output = self.sigmoid(hidden_input)
+        
+        # 2. Output layer computation
+        # output = σ(W_hidden × hidden + bias_output)
+        final_input = np.dot(hidden_output, self.w_hidden_output) + self.b_output
+        final_output = self.sigmoid(final_input)
+        
+        return final_output[0], hidden_output
+
+
+# Inisialisasi model global
+ann_model = SimpleANN()
+
+
+@app.route('/api/ann', methods=['POST'])
+def ann_demo():
+    """Endpoint API untuk demo ANN"""
+    try:
+        data = request.get_json()
+        x1 = float(data.get('x1', 0.5))
+        x2 = float(data.get('x2', 0.3))
+        
+        # Buat array input
+        inputs = np.array([x1, x2])
+        
+        # Forward propagation
+        output, hidden = ann_model.forward(inputs)
+        
+        return jsonify({
+            "inputs": [x1, x2],
+            "hidden_layer": hidden.tolist(),
+            "output": round(float(output), 4),
+            "explanation": f"Input [{x1}, {x2}] diproses melalui 3 neuron tersembunyi. "
+                          f"Aktivasi hidden layer: {[round(h, 3) for h in hidden]}. "
+                          f"Output akhir: {round(float(output), 4)}."
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400</code></pre>
+
+            <h3>Penjelasan Kode</h3>
+            <ol>
+              <li>
+                <strong>Inisialisasi Bobot:</strong> Bobot dan bias
+                diinisialisasi (dalam contoh ini pre-trained, pada kasus nyata
+                dilakukan random initialization lalu training)
+              </li>
+              <li>
+                <strong>Fungsi Sigmoid:</strong> Mengubah nilai input menjadi
+                0-1, digunakan sebagai fungsi aktivasi
+              </li>
+              <li>
+                <strong>Forward Propagation:</strong>
+                <ul>
+                  <li>Input dikalikan dengan bobot, ditambah bias</li>
+                  <li>Hasil dilewatkan fungsi sigmoid</li>
+                  <li>Output hidden layer menjadi input untuk output layer</li>
+                  <li>Proses diulang hingga menghasilkan output akhir</li>
+                </ul>
+              </li>
+              <li>
+                <strong>API Endpoint:</strong> Menerima 2 input numerik,
+                menjalankan forward propagation, mengembalikan hasil prediksi
+              </li>
+            </ol>
+          </div>
+
+          <div class="demo-section">
+            <h3>Demo Interaktif</h3>
+            <p>
+              Masukkan dua nilai input (0-1) untuk melihat prediksi neural
+              network:
+            </p>
+
+            <form class="demo-form" id="annForm">
+              <label>
+                Input 1 (x1):
+                <input
+                  type="number"
+                  step="0.1"
+                  name="x1"
+                  value="0.5"
+                  required
+                />
+              </label>
+              <label>
+                Input 2 (x2):
+                <input
+                  type="number"
+                  step="0.1"
+                  name="x2"
+                  value="0.3"
+                  required
+                />
+              </label>
+              <button type="submit">Prediksi Output</button>
+            </form>
+            <div class="result" id="annResult"></div>
+          </div>
+
+          <div class="content-section">
+            <h2>Cara Kerja Forward Propagation</h2>
+            <p>
+              <strong>Contoh perhitungan dengan input x1=0.5, x2=0.3:</strong>
+            </p>
+
+            <h3>Step 1: Hidden Layer</h3>
+            <pre><code># Hidden neuron 1
+h1_input = (0.5 × 0.5) + (0.3 × 0.2) + 0.1 = 0.41
+h1_output = sigmoid(0.41) = 0.601
+
+# Hidden neuron 2
+h2_input = (0.5 × -0.3) + (0.3 × 0.6) + (-0.2) = -0.17
+h2_output = sigmoid(-0.17) = 0.458
+
+# Hidden neuron 3
+h3_input = (0.5 × 0.8) + (0.3 × -0.4) + 0.3 = 0.58
+h3_output = sigmoid(0.58) = 0.641</code></pre>
+
+            <h3>Step 2: Output Layer</h3>
+            <pre><code># Output neuron
+output_input = (0.601 × 0.7) + (0.458 × -0.5) + (0.641 × 0.9) + 0.2 = 0.968
+output = sigmoid(0.968) = 0.725</code></pre>
+
+            <p>
+              <strong>Hasil:</strong> Neural network memprediksi output
+              <strong>0.725</strong> untuk input [0.5, 0.3]
+            </p>
+
+            <h3>Visualisasi Arsitektur</h3>
+            <pre><code>Input Layer    Hidden Layer      Output Layer
+    (2)            (3)                (1)
+
+  [x1=0.5] -----> [h1] ------\\
+              \\-> [h2] --------> [Output=0.725]
+  [x2=0.3] -----> [h3] ------/
+              
+Weights: w_input_hidden, w_hidden_output
+Activation: Sigmoid function</code></pre>
+          </div>
+
+          <div class="content-section">
+            <h2>Keunggulan & Keterbatasan</h2>
+
+            <h3>Keunggulan:</h3>
+            <ul>
+              <li>Dapat mempelajari pola non-linear yang kompleks</li>
+              <li>Adaptif terhadap data baru melalui training</li>
+              <li>Robust terhadap noise dalam data</li>
+              <li>Dapat digunakan untuk berbagai jenis masalah</li>
+            </ul>
+
+            <h3>Keterbatasan:</h3>
+            <ul>
+              <li>Membutuhkan data training yang besar</li>
+              <li>Proses training bisa memakan waktu lama</li>
+              <li>"Black box" - sulit diinterpretasi</li>
+              <li>Rentan terhadap overfitting</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; <span id="year"></span> MyWebsite - Soft Computing</p>
+      </div>
+    </footer>
+
+    <script src="../../static/js/script.js"></script>
+  </body>
+</html>

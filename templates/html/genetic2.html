@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Algoritma Genetika 2 - Knapsack</title>
+    <link rel="stylesheet" href="../../static/css/style.css" />
+  </head>
+  <body class="detail-page genetic-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="../index.html">MyWebsite</a>
+        <nav class="site-nav">
+          <ul>
+            <li>
+              <a class="nav-link" href="../index.html#home">Home</a>
+            </li>
+            <li>
+              <a class="nav-link" href="../index.html#about">About</a>
+            </li>
+            <li>
+              <a class="nav-link active" href="../index.html#materi">Materi</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <a href="../index.html#materi" class="back-link"
+            ><- Kembali ke Materi</a
+          >
+
+          <h1>Algoritma Genetika 2 (Knapsack Problem)</h1>
+
+          <div class="content-section">
+            <h2>Pengertian Singkat</h2>
+            <p>
+              Variant ini menggunakan representasi kromosom biner untuk
+              menyelesaikan masalah Knapsack sederhana: pilih item-item yang
+              menghasilkan nilai maksimum tanpa melebihi kapasitas ransel.
+            </p>
+          </div>
+
+          <div class="content-section">
+            <h2>Implementasi Python (Seluruh Source Code untuk Knapsack GA)</h2>
+            <div class="code-block-header">
+              backend/app.py - Knapsack GA (full)
+            </div>
+            <pre><code>import random
+
+      items_knapsack = {
+        'A': {'weight': 7, 'value': 5},
+        'B': {'weight': 2, 'value': 4},
+        'C': {'weight': 1, 'value': 7},
+        'D': {'weight': 9, 'value': 2},
+      }
+      capacity_default = 15
+
+
+      def decode_knapsack(chromosome, items_map):
+        item_list = list(items_map.keys())
+        total_weight = 0
+        total_value = 0
+        chosen = []
+        for gene, name in zip(chromosome, item_list):
+          if gene == 1:
+            total_weight += items_map[name]['weight']
+            total_value += items_map[name]['value']
+            chosen.append(name)
+        return chosen, total_weight, total_value
+
+
+      def fitness_knapsack(chromosome, items_map, capacity):
+        _, w, v = decode_knapsack(chromosome, items_map)
+        return v if w <= capacity else 0
+
+
+      def roulette_selection(population, fitnesses):
+        total = sum(fitnesses)
+        if total == 0:
+          return random.choice(population)[:]
+        pick = random.uniform(0, total)
+        current = 0.0
+        for chrom, fit in zip(population, fitnesses):
+          current += fit
+          if current >= pick:
+            return chrom[:]
+        return population[-1][:]
+
+
+      def crossover_single(p1, p2):
+        if len(p1) < 2:
+          return p1[:], p2[:]
+        point = random.randint(1, len(p1) - 1)
+        return p1[:point] + p2[point:], p2[:point] + p1[point:]
+
+
+      def mutate_flip(chrom, mutation_rate):
+        return [1 - g if random.random() < mutation_rate else g for g in chrom]
+
+
+      @app.route('/api/genetic2', methods=['POST'])
+      def genetic2_demo():
+        try:
+          data = request.get_json() or {}
+          pop_size = int(data.get('pop_size', 10))
+          generations = int(data.get('generations', 10))
+          crossover_rate = float(data.get('crossover_rate', 0.8))
+          mutation_rate = float(data.get('mutation_rate', 0.1))
+          elitism = bool(data.get('elitism', True))
+          capacity = int(data.get('capacity', capacity_default))
+
+          n_items = len(items_knapsack)
+          population = [[random.randint(0, 1) for _ in range(n_items)] for _ in range(pop_size)]
+
+          history = []
+          for gen in range(generations):
+            fitnesses = [fitness_knapsack(ch, items_knapsack, capacity) for ch in population]
+            best_idx = fitnesses.index(max(fitnesses))
+            best_ch = population[best_idx][:]
+            chosen, w, v = decode_knapsack(best_ch, items_knapsack)
+            history.append({'generation': gen + 1, 'best': best_ch, 'weight': w, 'value': v})
+
+            new_pop = []
+            if elitism:
+              new_pop.append(best_ch[:])
+
+            while len(new_pop) < pop_size:
+              p1 = roulette_selection(population, fitnesses)
+              p2 = roulette_selection(population, fitnesses)
+              if random.random() < crossover_rate:
+                c1, c2 = crossover_single(p1, p2)
+              else:
+                c1, c2 = p1[:], p2[:]
+              c1 = mutate_flip(c1, mutation_rate)
+              c2 = mutate_flip(c2, mutation_rate)
+              new_pop.append(c1)
+              if len(new_pop) < pop_size:
+                new_pop.append(c2)
+
+            population = new_pop[:pop_size]
+
+          fitnesses = [fitness_knapsack(ch, items_knapsack, capacity) for ch in population]
+          best_idx = fitnesses.index(max(fitnesses))
+          best_ch = population[best_idx][:]
+          chosen, w, v = decode_knapsack(best_ch, items_knapsack)
+
+          result = {
+            'success': True,
+            'best_chromosome': best_ch,
+            'chosen_items': chosen,
+            'total_weight': w,
+            'total_value': v,
+            'capacity': capacity,
+            'history': history[-10:]
+          }
+
+          return jsonify(result)
+        except Exception as e:
+          return jsonify({'error': str(e)}), 400
+            </code></pre>
+          </div>
+
+          <div class="demo-section">
+            <h3>Demo Interaktif - Knapsack GA</h3>
+            <p>
+              Gunakan parameter sederhana untuk menjalankan GA pada item contoh.
+            </p>
+
+            <form class="demo-form" id="ga2Form">
+              <label>
+                Ukuran Populasi:
+                <input
+                  type="number"
+                  name="pop_size"
+                  value="20"
+                  min="4"
+                  max="200"
+                />
+              </label>
+
+              <label>
+                Generasi Maksimal:
+                <input
+                  type="number"
+                  name="generations"
+                  value="50"
+                  min="1"
+                  max="1000"
+                />
+              </label>
+
+              <label>
+                Crossover Rate (0-1):
+                <input
+                  type="number"
+                  step="0.05"
+                  name="crossover_rate"
+                  value="0.8"
+                  min="0"
+                  max="1"
+                />
+              </label>
+
+              <label>
+                Mutation Rate (0-1):
+                <input
+                  type="number"
+                  step="0.01"
+                  name="mutation_rate"
+                  value="0.1"
+                  min="0"
+                  max="1"
+                />
+              </label>
+
+              <label>
+                Kapasitas Ransel:
+                <input
+                  type="number"
+                  name="capacity"
+                  value="15"
+                  min="1"
+                  max="100"
+                />
+              </label>
+
+              <button type="submit">Jalankan Knapsack GA</button>
+            </form>
+
+            <div class="result" id="ga2Result"></div>
+          </div>
+
+          <div class="content-section">
+            <h2>Catatan</h2>
+            <ul>
+              <li>Contoh ini menggunakan 4 item sederhana untuk demo cepat.</li>
+              <li>
+                Batasi ukuran populasi dan generasi agar respons tetap cepat.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; <span id="year"></span> MyWebsite - Soft Computing</p>
+      </div>
+    </footer>
+
+    <script src="../../static/js/script.js"></script>
+  </body>
+</html>

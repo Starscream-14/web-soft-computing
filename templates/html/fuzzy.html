@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Logika Fuzzy - Soft Computing</title>
+    <link rel="stylesheet" href="../../static/css/style.css" />
+  </head>
+  <body class="detail-page fuzzy-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="../index.html">MyWebsite</a>
+        <nav class="site-nav">
+          <ul>
+            <li>
+              <a class="nav-link" href="../index.html#home">Home</a>
+            </li>
+            <li>
+              <a class="nav-link" href="../index.html#about">About</a>
+            </li>
+            <li>
+              <a class="nav-link active" href="../index.html#materi">Materi</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <a href="../index.html#materi" class="back-link"
+            ><- Kembali ke Materi</a
+          >
+
+          <h1>Logika Fuzzy (Fuzzy Logic)</h1>
+
+          <div class="content-section">
+            <h2>Pengertian</h2>
+            <p>
+              <strong>Logika Fuzzy</strong> adalah sistem logika yang dapat
+              menangani konsep kebenaran parsial, di mana nilai kebenaran berada
+              dalam rentang 0 (sepenuhnya salah) hingga 1 (sepenuhnya benar).
+              Berbeda dengan logika Boolean klasik yang hanya mengenal benar (1)
+              atau salah (0), logika fuzzy memungkinkan nilai di antaranya
+              seperti 0.3, 0.7, dll.
+            </p>
+            <p>
+              Logika fuzzy pertama kali diperkenalkan oleh
+              <strong>Lotfi A. Zadeh</strong>
+              pada tahun 1965. Pendekatan ini sangat berguna untuk mengatasi
+              ketidakpastian dan ambiguitas dalam sistem kontrol, pengambilan
+              keputusan, dan pemodelan sistem.
+            </p>
+
+            <h3>Komponen Utama Logika Fuzzy</h3>
+            <ul>
+              <li>
+                <strong>Fuzzifikasi:</strong> Mengubah input crisp (nilai pasti)
+                menjadi nilai fuzzy dengan menghitung derajat keanggotaan dalam
+                himpunan fuzzy
+              </li>
+              <li>
+                <strong>Basis Aturan Fuzzy:</strong> Kumpulan aturan IF-THEN
+                yang mendefinisikan hubungan antara input dan output
+              </li>
+              <li>
+                <strong>Inferensi Fuzzy:</strong> Proses penalaran menggunakan
+                aturan fuzzy untuk menghasilkan output fuzzy
+              </li>
+              <li>
+                <strong>Defuzzifikasi:</strong> Mengubah output fuzzy kembali
+                menjadi nilai crisp yang dapat digunakan
+              </li>
+            </ul>
+
+            <h3>Aplikasi Logika Fuzzy</h3>
+            <ul>
+              <li>Sistem kontrol (AC, mesin cuci, kamera auto-focus)</li>
+              <li>Sistem pengambilan keputusan</li>
+              <li>Pengenalan pola</li>
+              <li>Prediksi dan klasifikasi</li>
+              <li>Kendali kualitas produk</li>
+            </ul>
+          </div>
+
+          <div class="content-section">
+            <h2>Implementasi Python</h2>
+            <p>
+              Berikut adalah implementasi backend Python untuk menghitung
+              tingkat kenyamanan berdasarkan suhu dan kelembaban menggunakan
+              logika fuzzy:
+            </p>
+
+            <div class="code-block-header">
+              backend/server.py - Fungsi Logika Fuzzy
+            </div>
+            <pre><code>def fuzzy_membership_temp(temp):
+    """Hitung derajat keanggotaan suhu: dingin, normal, panas"""
+    dingin = max(0, min(1, (20 - temp) / 10)) if temp <= 20 else 0
+    normal = max(0, min((temp - 15) / 10, (35 - temp) / 10))
+    panas = max(0, min((temp - 30) / 10, 1)) if temp >= 30 else 0
+    return {
+        "dingin": round(dingin, 2), 
+        "normal": round(normal, 2), 
+        "panas": round(panas, 2)
+    }
+
+
+def fuzzy_membership_humidity(hum):
+    """Hitung derajat keanggotaan kelembaban: kering, sedang, lembab"""
+    kering = max(0, min(1, (40 - hum) / 20)) if hum <= 40 else 0
+    sedang = max(0, min((hum - 30) / 20, (70 - hum) / 20))
+    lembab = max(0, min((hum - 60) / 20, 1)) if hum >= 60 else 0
+    return {
+        "kering": round(kering, 2), 
+        "sedang": round(sedang, 2), 
+        "lembab": round(lembab, 2)
+    }
+
+
+def fuzzy_inference(temp_vals, hum_vals):
+    """Inferensi fuzzy: menghitung tingkat kenyamanan"""
+    # Aturan fuzzy:
+    # - Nyaman tinggi jika suhu normal dan kelembaban sedang
+    # - Tidak nyaman jika suhu ekstrem (panas/dingin)
+    
+    comfort_high = min(temp_vals["normal"], hum_vals["sedang"])
+    comfort_medium = max(
+        min(temp_vals["normal"], hum_vals["kering"]),
+        min(temp_vals["normal"], hum_vals["lembab"])
+    )
+    comfort_low = max(temp_vals["dingin"], temp_vals["panas"])
+    
+    # Defuzzifikasi menggunakan Center of Gravity
+    # Skor kenyamanan 0-100
+    if comfort_high + comfort_medium + comfort_low == 0:
+        comfort_score = 50
+    else:
+        comfort_score = (
+            comfort_high * 80 + 
+            comfort_medium * 50 + 
+            comfort_low * 20
+        ) / (comfort_high + comfort_medium + comfort_low)
+    
+    return round(comfort_score, 1)
+
+
+@app.route('/api/fuzzy', methods=['POST'])
+def fuzzy_demo():
+    """Endpoint API untuk demo Logika Fuzzy"""
+    try:
+        data = request.get_json()
+        temp = float(data.get('temperature', 25))
+        humidity = float(data.get('humidity', 60))
+        
+        # Fuzzifikasi
+        temp_membership = fuzzy_membership_temp(temp)
+        hum_membership = fuzzy_membership_humidity(humidity)
+        
+        # Inferensi & Defuzzifikasi
+        comfort = fuzzy_inference(temp_membership, hum_membership)
+        
+        # Label kenyamanan
+        if comfort >= 70:
+            label = "Sangat Nyaman"
+        elif comfort >= 50:
+            label = "Cukup Nyaman"
+        else:
+            label = "Kurang Nyaman"
+        
+        return jsonify({
+            "temperature": temp,
+            "humidity": humidity,
+            "temp_membership": temp_membership,
+            "humidity_membership": hum_membership,
+            "comfort_score": comfort,
+            "comfort_label": label,
+            "explanation": f"Dengan suhu {temp}°C dan kelembaban {humidity}%, "
+                          f"sistem fuzzy menghitung tingkat kenyamanan {comfort}/100."
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400</code></pre>
+
+            <h3>Penjelasan Kode</h3>
+            <ol>
+              <li>
+                <strong>Fungsi Membership:</strong> Menghitung derajat
+                keanggotaan untuk setiap kategori (dingin/normal/panas,
+                kering/sedang/lembab)
+              </li>
+              <li>
+                <strong>Inferensi:</strong> Menggunakan operasi MIN dan MAX
+                untuk menerapkan aturan fuzzy
+              </li>
+              <li>
+                <strong>Defuzzifikasi:</strong> Menggunakan metode Center of
+                Gravity untuk menghasilkan nilai crisp (skor kenyamanan)
+              </li>
+              <li>
+                <strong>API Endpoint:</strong> Menerima input JSON, memproses
+                dengan fuzzy logic, mengembalikan hasil
+              </li>
+            </ol>
+          </div>
+
+          <div class="demo-section">
+            <h3>Demo Interaktif</h3>
+            <p>
+              Coba masukkan nilai suhu dan kelembaban untuk melihat hasil sistem
+              fuzzy:
+            </p>
+
+            <form class="demo-form" id="fuzzyForm">
+              <label>
+                Suhu (°C):
+                <input type="number" name="temperature" value="25" required />
+              </label>
+              <label>
+                Kelembaban (%):
+                <input type="number" name="humidity" value="60" required />
+              </label>
+              <button type="submit">Hitung Kenyamanan</button>
+            </form>
+            <div class="result" id="fuzzyResult"></div>
+          </div>
+
+          <div class="content-section">
+            <h2>Cara Kerja</h2>
+            <ol>
+              <li>
+                User memasukkan suhu (contoh: 28°C) dan kelembaban (contoh: 70%)
+              </li>
+              <li>
+                <strong>Fuzzifikasi:</strong> Sistem menghitung derajat
+                keanggotaan:
+                <ul>
+                  <li>Suhu 28°C → normal: 0.7, panas: 0.2</li>
+                  <li>Kelembaban 70% → sedang: 0.5, lembab: 0.5</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Inferensi:</strong> Aturan fuzzy diterapkan:
+                <ul>
+                  <li>
+                    IF suhu normal AND kelembaban sedang THEN nyaman tinggi
+                  </li>
+                  <li>Hasil: comfort_high = min(0.7, 0.5) = 0.5</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Defuzzifikasi:</strong> Skor akhir dihitung: (0.5×80 +
+                ...) / total = 65/100
+              </li>
+              <li>Output: "Cukup Nyaman" dengan skor 65</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; <span id="year"></span> MyWebsite - Soft Computing</p>
+      </div>
+    </footer>
+
+    <script src="../../static/js/script.js"></script>
+  </body>
+</html>

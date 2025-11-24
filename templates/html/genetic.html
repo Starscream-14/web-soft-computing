@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Algoritma Genetika - Soft Computing</title>
+    <link rel="stylesheet" href="../../static/css/style.css" />
+  </head>
+  <body class="detail-page genetic-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="../index.html">MyWebsite</a>
+        <nav class="site-nav">
+          <ul>
+            <li>
+              <a class="nav-link" href="../index.html#home">Home</a>
+            </li>
+            <li>
+              <a class="nav-link" href="../index.html#about">About</a>
+            </li>
+            <li>
+              <a class="nav-link active" href="../index.html#materi">Materi</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <a href="../index.html#materi" class="back-link"
+            ><- Kembali ke Materi</a
+          >
+
+          <h1>Algoritma Genetika (Genetic Algorithm)</h1>
+
+          <div class="content-section">
+            <h2>Pengertian</h2>
+            <p>
+              <strong>Algoritma Genetika (GA)</strong> adalah metode optimasi
+              dan pencarian yang terinspirasi dari proses evolusi biologis dan
+              seleksi alam. Dikembangkan oleh <strong>John Holland</strong> pada
+              tahun 1970-an, GA meniru mekanisme evolusi Darwin untuk menemukan
+              solusi optimal atau near-optimal dari masalah kompleks.
+            </p>
+            <p>
+              GA bekerja dengan mempertahankan populasi solusi kandidat,
+              mengevaluasi "fitness" (kualitas) setiap individu, lalu
+              menghasilkan generasi baru melalui seleksi, crossover
+              (perkawinan), dan mutasi. Proses ini diulang hingga menemukan
+              solusi yang memuaskan.
+            </p>
+
+            <h3>Komponen Utama Algoritma Genetika</h3>
+            <ul>
+              <li>
+                <strong>Populasi:</strong> Kumpulan individu (solusi kandidat)
+                dalam satu generasi
+              </li>
+              <li>
+                <strong>Kromosom:</strong> Representasi solusi (bisa berupa
+                string, array, dll)
+              </li>
+              <li><strong>Gen:</strong> Unit terkecil dalam kromosom</li>
+              <li>
+                <strong>Fitness Function:</strong> Fungsi untuk mengevaluasi
+                kualitas solusi
+              </li>
+              <li>
+                <strong>Seleksi:</strong> Memilih individu terbaik untuk
+                reproduksi
+              </li>
+              <li>
+                <strong>Crossover:</strong> Menggabungkan dua parent untuk
+                menghasilkan offspring
+              </li>
+              <li>
+                <strong>Mutasi:</strong> Mengubah gen secara acak untuk menjaga
+                keragaman
+              </li>
+            </ul>
+
+            <h3>Aplikasi Algoritma Genetika</h3>
+            <ul>
+              <li>Optimasi fungsi matematika</li>
+              <li>Traveling Salesman Problem (TSP)</li>
+              <li>Penjadwalan dan routing</li>
+              <li>Desain struktur dan engineering</li>
+              <li>
+                Machine learning (feature selection, hyperparameter tuning)
+              </li>
+              <li>Game AI dan strategi</li>
+            </ul>
+          </div>
+
+          <div class="content-section">
+            <h2>Implementasi Python</h2>
+            <p>
+              Berikut adalah implementasi GA untuk mencari string target melalui
+              evolusi:
+            </p>
+
+            <div class="code-block-header">
+              backend/server.py - Class Genetic Algorithm
+            </div>
+            <pre><code>import random
+import string
+
+class GeneticAlgorithm:
+    """Algoritma Genetika untuk mencari string target"""
+    
+    def __init__(self, target, population_size=100, mutation_rate=0.01):
+        self.target = target.upper()
+        self.target_len = len(target)
+        self.population_size = population_size
+        self.mutation_rate = mutation_rate
+        # Gene pool: huruf A-Z dan spasi
+        self.genes = string.ascii_uppercase + " "
+    
+    def create_individual(self):
+        """Buat individu random (string acak)"""
+        return ''.join(random.choices(self.genes, k=self.target_len))
+    
+    def fitness(self, individual):
+        """Hitung fitness: jumlah karakter yang cocok dengan target"""
+        return sum(1 for a, b in zip(individual, self.target) if a == b)
+    
+    def crossover(self, parent1, parent2):
+        """Crossover: gabungkan dua parent di titik potong acak"""
+        point = random.randint(1, self.target_len - 1)
+        return parent1[:point] + parent2[point:]
+    
+    def mutate(self, individual):
+        """Mutasi: ubah karakter secara acak dengan probabilitas tertentu"""
+        individual_list = list(individual)
+        for i in range(len(individual_list)):
+            if random.random() < self.mutation_rate:
+                individual_list[i] = random.choice(self.genes)
+        return ''.join(individual_list)
+    
+    def run(self, max_generations=1000):
+        """Jalankan algoritma genetika"""
+        
+        # Inisialisasi populasi awal
+        population = [self.create_individual() for _ in range(self.population_size)]
+        history = []
+        
+        for generation in range(max_generations):
+            # Evaluasi fitness setiap individu
+            fitness_scores = [(ind, self.fitness(ind)) for ind in population]
+            fitness_scores.sort(key=lambda x: x[1], reverse=True)
+            
+            best_individual, best_fitness = fitness_scores[0]
+            
+            # Simpan history
+            history.append({
+                "generation": generation + 1,
+                "best": best_individual,
+                "fitness": best_fitness
+            })
+            
+            # Cek apakah sudah menemukan target
+            if best_fitness == self.target_len:
+                return {
+                    "success": True,
+                    "generations": generation + 1,
+                    "best_individual": best_individual,
+                    "history": history[-10:]  # 10 generasi terakhir
+                }
+            
+            # Seleksi: ambil 50% individu terbaik sebagai parent
+            parents = [ind for ind, _ in fitness_scores[:self.population_size // 2]]
+            
+            # Buat generasi baru
+            new_population = parents.copy()
+            
+            # Crossover & Mutasi untuk mengisi populasi
+            while len(new_population) < self.population_size:
+                # Pilih 2 parent secara acak
+                parent1, parent2 = random.sample(parents, 2)
+                
+                # Crossover
+                child = self.crossover(parent1, parent2)
+                
+                # Mutasi
+                child = self.mutate(child)
+                
+                new_population.append(child)
+            
+            population = new_population
+        
+        # Jika tidak ketemu dalam max_generations
+        best_individual, best_fitness = max(
+            [(ind, self.fitness(ind)) for ind in population],
+            key=lambda x: x[1]
+        )
+        
+        return {
+            "success": False,
+            "generations": max_generations,
+            "best_individual": best_individual,
+            "fitness": best_fitness,
+            "history": history[-10:]
+        }
+
+
+@app.route('/api/genetic', methods=['POST'])
+def genetic_demo():
+    """Endpoint API untuk demo Algoritma Genetika"""
+    try:
+        data = request.get_json()
+        target = data.get('target', 'HELLO').upper()
+        max_gen = int(data.get('generations', 100))
+        
+        if len(target) > 20:
+            return jsonify({"error": "Target terlalu panjang (max 20 karakter)"}), 400
+        
+        # Jalankan GA
+        ga = GeneticAlgorithm(target, population_size=100, mutation_rate=0.01)
+        result = ga.run(max_generations=max_gen)
+        
+        # Buat penjelasan
+        if result["success"]:
+            explanation = (
+                f"Algoritma genetika berhasil menemukan '{target}' dalam "
+                f"{result['generations']} generasi! Proses evolusi dimulai dari "
+                f"string acak, lalu melalui seleksi, crossover, dan mutasi hingga "
+                f"menemukan target."
+            )
+        else:
+            explanation = (
+                f"Setelah {result['generations']} generasi, solusi terbaik adalah "
+                f"'{result['best_individual']}' dengan fitness {result['fitness']}/{len(target)}. "
+                f"Coba tingkatkan jumlah generasi untuk hasil lebih baik."
+            )
+        
+        result["target"] = target
+        result["explanation"] = explanation
+        
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400</code></pre>
+
+            <h3>Penjelasan Kode</h3>
+            <ol>
+              <li>
+                <strong>Inisialisasi:</strong> Set target string, ukuran
+                populasi, mutation rate
+              </li>
+              <li>
+                <strong>Create Individual:</strong> Buat string acak dengan
+                panjang = target
+              </li>
+              <li>
+                <strong>Fitness Function:</strong> Hitung berapa karakter yang
+                cocok dengan target
+              </li>
+              <li>
+                <strong>Crossover:</strong> Potong 2 parent di titik acak,
+                gabungkan
+              </li>
+              <li>
+                <strong>Mutasi:</strong> Ubah karakter acak dengan probabilitas
+                kecil
+              </li>
+              <li>
+                <strong>Main Loop:</strong> Evaluasi → Seleksi → Crossover →
+                Mutasi → Repeat
+              </li>
+            </ol>
+          </div>
+
+          <div class="demo-section">
+            <h3>Demo Interaktif</h3>
+            <p>
+              Masukkan target string dan lihat bagaimana algoritma genetika
+              menemukannya:
+            </p>
+
+            <form class="demo-form" id="gaForm">
+              <label>
+                Target String (A-Z dan spasi):
+                <input
+                  type="text"
+                  name="target"
+                  value="HELLO"
+                  required
+                  maxlength="20"
+                />
+              </label>
+              <label>
+                Generasi Maksimal:
+                <input
+                  type="number"
+                  name="generations"
+                  value="100"
+                  min="10"
+                  max="1000"
+                  required
+                />
+              </label>
+              <button type="submit">Jalankan GA</button>
+            </form>
+            <div class="result" id="gaResult"></div>
+          </div>
+
+          <div class="content-section">
+            <h2>Contoh Proses Evolusi</h2>
+            <p><strong>Target: "HELLO"</strong></p>
+
+            <pre><code>Generasi 1:
+  Populasi awal (random):
+    - "XKZPM" (fitness: 0/5)
+    - "HQWLO" (fitness: 2/5) ← H dan O cocok
+    - "ABCDE" (fitness: 0/5)
+    ... (97 individu lainnya)
+
+Generasi 10:
+  Setelah seleksi & crossover:
+    - "HELLO" (fitness: 5/5) ← TARGET FOUND! ✓
+    - "HXLLO" (fitness: 4/5)
+    - "HELPO" (fitness: 4/5)
+
+Algoritma BERHENTI - solusi ditemukan dalam 10 generasi!</code></pre>
+
+            <h3>Visualisasi Langkah-Langkah</h3>
+            <pre><code>1. INISIALISASI
+   Populasi = ["XKZPM", "HQWLO", "ABCDE", ...]
+   
+2. EVALUASI FITNESS
+   XKZPM → 0/5, HQWLO → 2/5, ABCDE → 0/5
+   
+3. SELEKSI (ambil 50% terbaik)
+   Parents = ["HQWLO", "HELLA", ...]
+   
+4. CROSSOVER
+   Parent1: H Q W L O
+   Parent2: H E L L A
+   Point: 2
+   Child:   H Q | L L A  → "HQLLA"
+   
+5. MUTASI (probabilitas 1%)
+   HQLLA → HELLO (karakter Q mutasi jadi E)
+   
+6. GENERASI BARU
+   Populasi = [parents + children]
+   
+7. ULANGI step 2-6 hingga target ditemukan</code></pre>
+          </div>
+
+          <div class="content-section">
+            <h2>Parameter Penting</h2>
+
+            <h3>Population Size (Ukuran Populasi)</h3>
+            <ul>
+              <li>Lebih besar = lebih banyak keragaman, tapi lebih lambat</li>
+              <li>Lebih kecil = lebih cepat, tapi risiko konvergen prematur</li>
+              <li>Rekomendasi: 50-200 untuk masalah sederhana</li>
+            </ul>
+
+            <h3>Mutation Rate (Tingkat Mutasi)</h3>
+            <ul>
+              <li>Terlalu tinggi = populasi jadi random, sulit konvergen</li>
+              <li>Terlalu rendah = terjebak di local optimum</li>
+              <li>Rekomendasi: 0.01 - 0.05 (1-5%)</li>
+            </ul>
+
+            <h3>Selection Method</h3>
+            <ul>
+              <li>
+                <strong>Elitism:</strong> Pertahankan individu terbaik (dipakai
+                di kode)
+              </li>
+              <li>
+                <strong>Tournament:</strong> Pilih terbaik dari subset random
+              </li>
+              <li>
+                <strong>Roulette Wheel:</strong> Probabilitas terpilih sesuai
+                fitness
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-section">
+            <h2>Keunggulan & Keterbatasan</h2>
+
+            <h3>Keunggulan:</h3>
+            <ul>
+              <li>Tidak memerlukan gradien atau turunan fungsi</li>
+              <li>Dapat menangani ruang pencarian yang kompleks</li>
+              <li>Paralel secara alami (populasi independen)</li>
+              <li>Robust terhadap local optimum</li>
+            </ul>
+
+            <h3>Keterbatasan:</h3>
+            <ul>
+              <li>Tidak menjamin solusi optimal global</li>
+              <li>Banyak parameter yang perlu di-tuning</li>
+              <li>Bisa lambat untuk masalah sangat kompleks</li>
+              <li>Sulit menentukan kapan harus berhenti</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; <span id="year"></span> MyWebsite - Soft Computing</p>
+      </div>
+    </footer>
+
+    <script src="../../static/js/script.js"></script>
+  </body>
+</html>

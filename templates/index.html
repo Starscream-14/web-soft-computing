@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MyWebsite</title>
+    <link rel="stylesheet" href="../static/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="#home">MyWebsite</a>
+
+        <button
+          id="navToggle"
+          class="nav-toggle"
+          aria-label="Buka menu"
+          aria-expanded="false"
+        >
+          <span class="hamburger" aria-hidden="true"></span>
+        </button>
+
+        <nav id="siteNav" class="site-nav" aria-label="Navigasi utama">
+          <ul>
+            <li><a class="nav-link active" href="#home">Home</a></li>
+            <li><a class="nav-link" href="#about">About</a></li>
+            <li><a class="nav-link" href="#materi">Materi</a></li>
+            <li><a class="nav-link" href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="section hero">
+        <div class="container">
+          <h1>Selamat Datang di MyWebsite!</h1>
+          <p>
+            Website ini dibuat dengan tujuan pembuatan tugas Soft Computing yang
+            dimana tugasnya dimintakan untuk membuat sebuah website yang
+            berisikan pengertian mengenai mata kuliah Soft Computing besertakan
+            materi-materi yang telah dipelajari seperti Logika Fuzzy, Artificial
+            Neural Networks, Algoritma Genetika, dan lainnya.
+          </p>
+        </div>
+      </section>
+
+      <section id="about" class="section">
+        <div class="container">
+          <h2>Tentang Soft Computing</h2>
+          <p>
+            <strong>Soft Computing</strong> adalah pendekatan komputasi yang
+            toleran terhadap ketidakpastian, ketidakakuratan, dan kebenaran
+            parsial. Berbeda dengan komputasi konvensional (hard computing) yang
+            bersifat presisi dan deterministik, soft computing meniru kemampuan
+            pikiran manusia dalam pengambilan keputusan di lingkungan yang tidak
+            pasti.
+          </p>
+          <p>
+            Soft computing mencakup berbagai metodologi seperti
+            <strong>Logika Fuzzy</strong> (Fuzzy Logic),
+            <strong>Jaringan Saraf Tiruan</strong> (Artificial Neural Networks),
+            <strong>Algoritma Genetika</strong> (Genetic Algorithms), dan
+            teknik-teknik lain yang dapat bekerja dengan data yang tidak lengkap
+            atau ambigu.
+          </p>
+          <p>
+            Tujuan utama Soft Computing adalah menghasilkan solusi yang praktis,
+            murah, dan dapat diterima meskipun tidak selalu optimal secara
+            matematis. Aplikasinya meliputi pengenalan pola, sistem kontrol,
+            pengambilan keputusan, dan optimasi di berbagai bidang.
+          </p>
+        </div>
+      </section>
+
+      <section id="materi" class="section alt">
+        <div class="container">
+          <h2>Materi Soft Computing</h2>
+          <p>
+            Pelajari metode-metode utama dalam Soft Computing. Klik
+            "Selengkapnya" untuk penjelasan detail, contoh kode Python, dan demo
+            interaktif.
+          </p>
+
+          <div class="materi-grid">
+            <div class="materi-card-preview">
+              <h3>Logika Fuzzy</h3>
+              <p>
+                Menangani ketidakpastian dengan derajat keanggotaan (0–1)
+                alih-alih nilai boolean. Cocok untuk sistem kontrol dan
+                pengambilan keputusan dalam kondisi tidak pasti.
+              </p>
+              <ul class="feature-list">
+                <li>Fuzzifikasi & Defuzzifikasi</li>
+                <li>Fuzzy Inference System</li>
+                <li>Membership Functions</li>
+              </ul>
+              <a href="html/fuzzy.html" class="btn-detail">Selengkapnya</a>
+            </div>
+
+            <div class="materi-card-preview">
+              <h3>Jaringan Saraf Tiruan (ANN)</h3>
+              <p>
+                Meniru cara kerja neuron biologis untuk mengenali pola dan
+                melakukan prediksi. Digunakan dalam klasifikasi, regresi, dan
+                pengenalan pola kompleks.
+              </p>
+              <ul class="feature-list">
+                <li>Forward Propagation</li>
+                <li>Activation Functions</li>
+                <li>Multi-layer Perceptron</li>
+              </ul>
+              <a href="html/ann.html" class="btn-detail">Selengkapnya</a>
+            </div>
+
+            <div class="materi-card-preview">
+              <h3>Algoritma Genetika</h3>
+              <p>
+                Meniru proses evolusi alamiah untuk mencari solusi optimal.
+                Menggunakan konsep seleksi, crossover (perkawinan), dan mutasi
+                untuk optimasi.
+              </p>
+              <ul class="feature-list">
+                <li>Seleksi & Fitness Function</li>
+                <li>Crossover & Mutation</li>
+                <li>Population Evolution</li>
+              </ul>
+              <a href="html/genetic.html" class="btn-detail">Selengkapnya</a>
+            </div>
+
+            <div class="materi-card-preview">
+              <h3>Algoritma Genetika 2 (Knapsack)</h3>
+              <p>
+                Varian ini menerapkan GA untuk masalah Knapsack dan memilih
+                item-item bernilai tinggi tanpa melebihi kapasitas.
+              </p>
+              <ul class="feature-list">
+                <li>Representasi: kromosom biner (pilih/tidak pilih)</li>
+                <li>Fitness = total value (dengan penalti bila overweight)</li>
+                <li>
+                  Seleksi roulette, crossover single-point, mutasi flip-bit
+                </li>
+              </ul>
+              <a href="html/genetic2.html" class="btn-detail">Selengkapnya</a>
+            </div>
+
+            <div class="materi-card-preview">
+              <h3>Travelling Salesman Problem</h3>
+              <p>
+                Varian ini menerapkan GA untuk menyelesaikan Traveling Salesman
+                Problem (TSP): mencari rute terpendek yang mengunjungi semua
+                kota sekali dan kembali ke titik awal.
+              </p>
+              <ul class="feature-list">
+                <li>
+                  Representasi: permutasi (urutan kota, ordered chromosome)
+                </li>
+                <li>Fitness: total distance (cari jarak minimum)</li>
+                <li>
+                  Operator: tournament/roulette, ordered crossover (OX), swap
+                  mutation
+                </li>
+              </ul>
+              <a href="html/tsp.html" class="btn-detail">Selengkapnya</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="section alt">
+        <div class="container">
+          <h2>Contact</h2>
+          <p>
+            Hubungi kami lewat email:
+            <a href="mailto:fathullahaffandi@gmail.com"
+              >fathullahaffandi@gmail.com</a
+            >
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; <span id="year"></span> MyWebsite</p>
+      </div>
+    </footer>
+
+    <script src="../static/js/script.js"></script>
+  </body>
+</html>
